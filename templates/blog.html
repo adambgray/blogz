@@ -8,8 +8,15 @@
 
         <ul>
             {% for blog in blogs %}
-            <li><h3>{{blog.title}}</h3>
-            <p>{{blog.body}}</p></li>
+            <a href="/blog?title={{blog.title}}&body={{blog.body}}">
+                <h2>{{blog.title}}</h2>
+                </a>
+                <ul>
+                    <li>
+                        <p>{{blog.body}}</p>
+                    </li>    
+                </ul>
+                
             {% endfor %}
         </ul>
 

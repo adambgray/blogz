@@ -21,13 +21,17 @@ class Blog(db.Model):
 @app.route('/')
 def index():
 
-    return render_template('base.html',title="The Blog")
+    return render_template('base.html',page_title="The Blog")
 
 @app.route('/blog')
 def blog():
-   # blog_id = request.args.get(blog_id)
-    blogs = Blog.query.all()
-    return render_template('blog.html',title="The Blog", 
+    title = request.args.get('title')
+    body = request.args.get('body')
+    if title and body:
+        return render_template('blogentry.html', title=title, body=body)
+    else:
+        blogs = Blog.query.all()
+        return render_template('blog.html',page_title="The Blog", 
         blogs=blogs)
 
 
@@ -35,15 +39,15 @@ def blog():
 def newpost():
 
     if request.method == 'POST':
-        blog_title = request.form['title']
-        blog_body = request.form['body']
-        if blog_title and blog_body:
-            new_blog = Blog(blog_title, blog_body)
+        title = request.form['title']
+        body = request.form['body']
+        if title and body:
+            new_blog = Blog(title, body)
             db.session.add(new_blog)
             db.session.commit()
-            return render_template('blogentry.html', blog_title=blog_title, blog_body=blog_body)
+            return render_template('blogentry.html', title=title, body=body)
         else:
-            return render_template('newpost.html', title="Add a new post", blog_title=blog_title, blog_body=blog_body, error='Blog must contain a title and a body.')
+            return render_template('newpost.html', page_title="Add a new post", title=title, body=body, error='Blog must contain a title and a body.')
     else:
         return render_template('newpost.html')
 
