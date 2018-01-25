@@ -8,7 +8,7 @@
 
         <ul>
             {% for blog in blogs %}
-            <a href="/blog?title={{blog.title}}&body={{blog.body}}">
+            <a href="/blog?{{blog.id}}">
                 <h2>{{blog.title}}</h2>
                 </a>
                 <ul>
