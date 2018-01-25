@@ -54,10 +54,18 @@ def blog():
         body = request.args.get('body')
         if title and body:
             return render_template('blogentry.html', title=title, body=body)
+    
     else:
-        blogs = Blog.query.all()
-        return render_template('blog.html',page_title="The Blog", 
-        blogs=blogs)
+        id = request.args.get('id')
+
+        if id:
+            blog = Blog.query.filter_by(id=id).first()
+            return render_template('blogentry.html', blog=blog)
+
+        else:
+            blogs = Blog.query.all()
+            return render_template('blog.html',page_title="The Blog", 
+            blogs=blogs)
 
 
 @app.route('/newpost', methods=['POST', 'GET'])
@@ -69,8 +77,11 @@ def newpost():
         if title and body:
             new_blog = Blog(title, body, logged_in_user())
             db.session.add(new_blog)
+            db.session.flush()
+            id = new_blog.id
             db.session.commit()
-            return render_template('blogentry.html', title=title, body=body)
+            blog = Blog.query.filter_by(id=id).first()
+            return render_template('blogentry.html', blog=blog)
         else:
             return render_template('newpost.html', page_title="Add a new post", title=title, body=body, error='Blog must contain a title and a body.')
     else:
