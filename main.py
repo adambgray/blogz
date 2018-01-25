@@ -57,11 +57,14 @@ def blog():
     
     else:
         id = request.args.get('id')
-
+        user = request.args.get('user')
         if id:
             blog = Blog.query.filter_by(id=id).first()
             return render_template('blogentry.html', blog=blog)
-
+        elif user:
+            blogs = Blog.query.filter_by(owner_id=user).all()
+            return render_template('blog.html',page_title="The Blog", 
+            blogs=blogs)
         else:
             blogs = Blog.query.all()
             return render_template('blog.html',page_title="The Blog", 
@@ -116,18 +119,23 @@ def signup():
 
         if len(username) < 3 or len(username) > 20:
             flash('Username must be between 3 and 20 characters with no spaces.', 'error')
+            return redirect('/signup')
         
         if ' ' in username:
             flash('Username must not contain spaces.', 'error')
+            return redirect('/signup')
 
         if password != verify:
             flash('Password and confirmation must match', 'error')
+            return redirect('/signup')
         
         if len(password) <3 or len(password) > 20:
             flash('Password must be between 3 and 20 characters with no spaces.', 'error')
+            return redirect('/signup')
         
         if ' ' in password:
             flash('Password must not contain spaces.', 'error')
+            return redirect('/signup')
 
 
         existing_user = User.query.filter_by(username=username).first()

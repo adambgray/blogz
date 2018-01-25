@@ -13,8 +13,13 @@
                 </a>
                 <ul>
                     <li>
-                        <p>{{blog.body}}</p>
+                        <h4>{{blog.body}}</h4>
                     </li>    
+                    <p>Written by: 
+                            <a href="/blog?user={{blog.owner.id}}">
+                            {{blog.owner.username}}
+                            </a>
+                    </p>
                 </ul>
                 
             {% endfor %}
